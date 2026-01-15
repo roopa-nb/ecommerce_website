@@ -15,20 +15,26 @@ public class ProductService {
         this.repo = repo;
     }
 
-    public List<Product> getAll() {
-        return repo.findByTenantIdAndActiveTrue(1L);
+    // USER
+    public List<Product> getAllActive() {
+        return repo.findByActiveTrue();
     }
 
+    public List<Product> search(String q) {
+        return repo.findByNameContainingIgnoreCaseAndActiveTrue(q);
+    }
+
+
     public List<Product> getFeatured() {
-        return repo.findByFeaturedTrue();
+        return repo.findByFeaturedTrueAndActiveTrue();
     }
 
     public List<Product> getByCategory(String slug) {
-        return repo.findByCategory_Slug(slug);
+        return repo.findByCategory_SlugAndActiveTrue(slug);
     }
 
-    public Product getBySlug(String slug) {
-        return repo.findBySlug(slug)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    // ADMIN
+    public List<Product> getAllAdmin() {
+        return repo.findAll();
     }
 }

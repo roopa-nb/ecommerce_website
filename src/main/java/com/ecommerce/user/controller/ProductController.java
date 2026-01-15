@@ -8,8 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "http://localhost:5173")
-
+@CrossOrigin("http://localhost:5173")
 public class ProductController {
 
     private final ProductService service;
@@ -18,27 +17,24 @@ public class ProductController {
         this.service = service;
     }
 
-    // All products
     @GetMapping
-    public List<Product> getAll() {
-        return service.getAll();
+    public List<Product> allActive() {
+        return service.getAllActive();
     }
 
-    // Featured products (home page)
     @GetMapping("/featured")
-    public List<Product> getFeatured() {
+    public List<Product> featured() {
         return service.getFeatured();
     }
 
-    // Products by category
     @GetMapping("/category/{slug}")
-    public List<Product> getByCategory(@PathVariable String slug) {
+    public List<Product> byCategory(@PathVariable String slug) {
         return service.getByCategory(slug);
     }
 
-    // Single product page
-    @GetMapping("/{slug}")
-    public Product getBySlug(@PathVariable String slug) {
-        return service.getBySlug(slug);
+    @GetMapping("/search")
+    public List<Product> search(@RequestParam String q) {
+        return service.search(q);
     }
+
 }

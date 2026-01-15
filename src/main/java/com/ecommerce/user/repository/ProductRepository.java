@@ -2,17 +2,16 @@ package com.ecommerce.user.repository;
 
 import com.ecommerce.user.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findByTenantIdAndActiveTrue(Long tenantId);
+    List<Product> findByActiveTrue();
 
-    List<Product> findByFeaturedTrue();
+    List<Product> findByFeaturedTrueAndActiveTrue();
 
-    List<Product> findByCategory_Slug(String slug);
+    List<Product> findByCategory_SlugAndActiveTrue(String slug);
+    List<Product> findByNameContainingIgnoreCaseAndActiveTrue(String q);
 
-    Optional<Product> findBySlug(String slug);
+
 }

@@ -1,7 +1,10 @@
 package com.ecommerce.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -9,21 +12,21 @@ import lombok.*;
 @NoArgsConstructor @AllArgsConstructor
 public class Category {
 
+//    @OneToMany(mappedBy = "category")
+//    @JsonManagedReference
+//    private List<Product> products;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long tenantId = 1L; // temporary (for future SaaS)
-
-    @Column(nullable = false)
+    private Long tenantId = 1L;
     private String name;
-
-    @Column(unique = true, nullable = false)
     private String slug;
-
+    private String description;
+    private Integer displayOrder = 0;
+    private Boolean active = true;
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
-    @Column(nullable = false)
-    private Boolean active = true;
 }

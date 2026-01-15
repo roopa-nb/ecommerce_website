@@ -4,6 +4,8 @@ import com.ecommerce.user.entity.Category;
 import com.ecommerce.user.repository.CategoryRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/admin/categories")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -15,6 +17,11 @@ public class AdminCategoryController {
         this.repo = repo;
     }
 
+    // ✅ ADMIN → GET ALL (active + inactive)
+    @GetMapping
+    public List<Category> getAllAdmin() {
+        return repo.findAllByOrderByDisplayOrderAsc();
+    }
     @PostMapping
     public Category create(@RequestBody Category category) {
 
@@ -22,7 +29,6 @@ public class AdminCategoryController {
             throw new RuntimeException("Category name required");
         }
 
-        // ✅ AUTO SLUG
         String slug = category.getName()
                 .toLowerCase()
                 .trim()
@@ -32,14 +38,12 @@ public class AdminCategoryController {
         category.setSlug(slug);
         category.setTenantId(1L);
 
-        if (category.getActive() == null) {
-            category.setActive(true);
+        if (category.getDisplayOrder() == null) {
+            category.setDisplayOrder(0);
         }
 
         return repo.save(category);
     }
-
-
 
     @PutMapping("/{id}")
     public Category update(@PathVariable Long id, @RequestBody Category category) {
@@ -48,9 +52,10 @@ public class AdminCategoryController {
 
         existing.setName(category.getName());
         existing.setImageUrl(category.getImageUrl());
+        existing.setDescription(category.getDescription());
         existing.setActive(category.getActive());
+        existing.setDisplayOrder(category.getDisplayOrder());
 
-        // ✅ AUTO UPDATE SLUG
         String slug = category.getName()
                 .toLowerCase()
                 .trim()
@@ -62,10 +67,9 @@ public class AdminCategoryController {
         return repo.save(existing);
     }
 
-
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         repo.deleteById(id);
     }
 }
+

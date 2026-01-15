@@ -15,12 +15,20 @@ public class CategoryService {
         this.repo = repo;
     }
 
-    public List<Category> getAll() {
-        return repo.findByTenantIdAndActiveTrue(1L);
+    // USER
+    public List<Category> getAllActive() {
+        return repo.findByActiveTrueOrderByDisplayOrderAsc();
     }
 
     public Category getBySlug(String slug) {
-        return repo.findBySlug(slug)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+        return repo.findBySlugAndActiveTrue(slug);
+    }
+
+    // ADMIN
+    public List<Category> getAllAdmin() {
+        return repo.findAllByOrderByDisplayOrderAsc();
     }
 }
+
+
+

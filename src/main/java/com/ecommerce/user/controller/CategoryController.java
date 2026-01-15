@@ -9,7 +9,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 @CrossOrigin(origins = "http://localhost:5173")
-
 public class CategoryController {
 
     private final CategoryService service;
@@ -18,9 +17,10 @@ public class CategoryController {
         this.service = service;
     }
 
+    // ✅ USER → only ACTIVE
     @GetMapping
     public List<Category> getAll() {
-        return service.getAll();
+        return service.getAllActive();
     }
 
     @GetMapping("/{slug}")
@@ -28,3 +28,4 @@ public class CategoryController {
         return service.getBySlug(slug);
     }
 }
+

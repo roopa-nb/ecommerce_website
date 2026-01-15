@@ -1,5 +1,7 @@
 package com.ecommerce.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,27 +15,25 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long tenantId = 1L;   // for future SaaS
-
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String slug;
-
-    private String imageUrl;
-
-    private Double price;
-
-    @Column(length = 2000)
+    @Column(length = 1000)
     private String description;
 
-    private Boolean featured = false;
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
+    @Column(unique = true, nullable = false)
+    private String slug;
+
+
+
 
     private Boolean active = true;
+    private Boolean featured = false;
+    private Integer displayOrder = 0;
 
-    // Many products → One category
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 }
